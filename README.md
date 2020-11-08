@@ -5,7 +5,7 @@
 [![reportcard-img]][reportcard-url]
 [![coverage-img]][coverage-url]
 
-Fast R-able Elastic Search Batch Indexer.
+Fast R-able Elastic Search Bulk Indexer.
 
 ## Features
 

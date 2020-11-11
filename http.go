@@ -8,10 +8,11 @@ import (
 )
 
 func send(ctx context.Context, httpClient *http.Client, url string, buf *bytes.Buffer) (*Response, error) {
-	req, errReq := makeRequest(ctx, url, buf)
+	req, errReq := makeRequest(url, buf)
 	if errReq != nil {
 		return nil, errReq
 	}
+	req = req.WithContext(ctx)
 
 	resp, errResp := httpClient.Do(req)
 	if errResp != nil {
@@ -29,8 +30,8 @@ func send(ctx context.Context, httpClient *http.Client, url string, buf *bytes.B
 	return bulkResp, nil
 }
 
-func makeRequest(ctx context.Context, url string, buf *bytes.Buffer) (*http.Request, error) {
-	req, errReq := http.NewRequestWithContext(ctx, http.MethodPost, url, buf)
+func makeRequest(url string, buf *bytes.Buffer) (*http.Request, error) {
+	req, errReq := http.NewRequest(http.MethodPost, url, buf)
 	if errReq != nil {
 		return nil, errReq
 	}

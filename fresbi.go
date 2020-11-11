@@ -16,14 +16,15 @@ type Client struct {
 
 // Config ...
 type Config struct {
-	batchSize           int
-	pipeline            string
-	refresh             string
-	routing             string
-	errorTrace          *interface{}
-	filterPath          []string
-	timeout             string
-	waitForActiveShards string
+	URL                 string
+	BatchSize           int
+	Pipeline            string
+	Refresh             string
+	Routing             string
+	ErrorTrace          *interface{}
+	FilterPath          []string
+	Timeout             string
+	WaitForActiveShards string
 }
 
 // Stats ...
@@ -39,9 +40,10 @@ type Stats struct {
 }
 
 // NewClient ...
-func NewClient(client *http.Client) *Client {
+func NewClient(client *http.Client, config Config) *Client {
 	return &Client{
 		client: client,
+		config: config,
 	}
 }
 
@@ -62,7 +64,7 @@ func (c *Client) AsBatch(ctx context.Context, fn func(Batch) error) (*Response, 
 		return nil, err
 	}
 
-	resp, errResp := send(ctx, c.client, c.url, req.Buffer())
+	resp, errResp := send(ctx, c.client, c.config.URL, req.Buffer())
 	if errResp != nil {
 		return nil, errResp
 	}

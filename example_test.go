@@ -9,19 +9,27 @@ import (
 )
 
 func Example() {
-	client := fresbi.NewClient(http.DefaultClient)
+	client := fresbi.NewClient(http.DefaultClient, fresbi.Config{
+		URL: "http://localhost:9200",
+	})
 
 	msgs := []string{"hi", "there", "everyone"}
 
-	_, err := client.AsBatch(context.Background(), func(req fresbi.Batch) error {
+	resp, err := client.AsBatch(context.Background(), func(req fresbi.Batch) error {
 		for i, msg := range msgs {
-			docID := strconv.Itoa(i)
 
-			req.Create(docID, msg)
+			req.Create(&fresbi.Item{
+				Index: "best_index_ever",
+				ID:    strconv.Itoa(i),
+				Body:  `can be almost anything ` + msg,
+			})
 		}
 		return nil
 	})
-	_ = err
+	if err != nil {
+		panic(err)
+	}
+	_ = resp
 
 	// Output:
 }

@@ -11,7 +11,9 @@ type bulkRequest struct {
 }
 
 func newBulkRequest() *bulkRequest {
-	return &bulkRequest{}
+	return &bulkRequest{
+		buf: &bytes.Buffer{},
+	}
 }
 
 func (br *bulkRequest) Buffer() *bytes.Buffer {

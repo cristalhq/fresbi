@@ -1,20 +1,43 @@
 package fresbi
 
-import "net/http"
+import (
+	"net/http"
+)
 
-// BulkResponse represents the Elasticsearch bulk response.
-//
-type BulkResponse struct {
-	HTTPResponse http.Response
+// Item ...
+type Item struct {
+	action string
 
-	Took      int                            `json:"took,omitempty"`
-	HasErrors bool                           `json:"errors,omitempty"`
-	Items     []map[string]*BulkResponseItem `json:"items,omitempty"`
+	Index         string `json:"_index,omitempty"`
+	ID            string `json:"_id,omitempty"`
+	Type          string `json:"_type,omitempty"`
+	Parent        string `json:"parent,omitempty"`
+	Routing       string `json:"routing,omitempty"`
+	Version       *int64 `json:"version,omitempty"`
+	VersionType   string `json:"version_type,omitempty"`
+	IfSeqNo       *int64 `json:"if_seq_no,omitempty"`
+	IfPrimaryTerm *int64 `json:"if_primary_term,omitempty"`
+	Pipeline      string `json:"pipeline,omitempty"` // index only
+
+	// RetryOnConflict is "_retry_on_conflict" for 6.0 and "retry_on_conflict" for 6.1+.
+	RetryOnConflict *int `json:"retry_on_conflict,omitempty"` // index and update only
+
+	Body interface{}
 }
 
-// BulkResponseItem represents the Elasticsearch bulk response item.
+// Response represents the Elasticsearch bulk response.
 //
-type BulkResponseItem struct {
+type Response struct {
+	HTTPResponse *http.Response
+
+	Took      int                        `json:"took,omitempty"`
+	HasErrors bool                       `json:"errors,omitempty"`
+	Items     []map[string]*ResponseItem `json:"items,omitempty"`
+}
+
+// ResponseItem represents the Elasticsearch bulk response item.
+//
+type ResponseItem struct {
 	Index      string `json:"_index"`
 	DocumentID string `json:"_id"`
 	Version    int64  `json:"_version"`
@@ -47,10 +70,10 @@ type BulkResponseItem struct {
 	// ForcedRefresh bool   `json:"forced_refresh,omitempty"`
 }
 
-type bulkIndexerItem struct {
-	Index      string
-	Action     string
-	DocumentID string
-	Body       interface{}
-	// RetryOnConflict *int
-}
+// type bulkIndexerItem struct {
+// 	Index      string
+// 	Action     string
+// 	DocumentID string
+// 	Body       interface{}
+// 	// RetryOnConflict *int
+// }

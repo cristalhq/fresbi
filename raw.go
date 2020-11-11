@@ -9,6 +9,7 @@ import (
 type RawClient struct {
 	client *http.Client
 	url    string
+	config Config
 	req    *bulkRequest
 }
 
@@ -23,23 +24,22 @@ func (rc *RawClient) Reset() {
 }
 
 // Flush ...
-func (rc *RawClient) Flush(ctx context.Context) error {
+func (rc *RawClient) Flush(ctx context.Context) (*Response, error) {
 	req, errReq := makeRequest(ctx, rc.url, rc.req.Buffer())
 	if errReq != nil {
-		return errReq
+		return nil, errReq
 	}
 
-	resp, errResp := rc.client.Do(req)
+	resp, errResp := send(ctx, rc.client, rc.url, rc.req.Buffer())
 	if errResp != nil {
-		return errResp
+		return nil, errResp
 	}
-	defer func() { _ = resp.Body.Close() }()
-
-	return nil
+	return resp, nil
 }
 
 // Index ...
-func (rc *RawClient) Index(index, docID string, data interface{}) error {
+func (rc *RawClient) Index(item *IndexItem) error {
+	item.op = "index"
 	return rc.req.Index(docID, data)
 }
 

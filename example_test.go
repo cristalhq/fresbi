@@ -13,7 +13,7 @@ func Example() {
 
 	msgs := []string{"hi", "there", "everyone"}
 
-	err := client.AsBatch(context.Background(), func(req fresbi.BulkRequest) error {
+	_, err := client.AsBatch(context.Background(), func(req fresbi.Batch) error {
 		for i, msg := range msgs {
 			docID := strconv.Itoa(i)
 

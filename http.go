@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func send(ctx context.Context, httpClient *http.Client, url string, buf *bytes.Buffer) (*BulkResponse, error) {
+func send(ctx context.Context, httpClient *http.Client, url string, buf *bytes.Buffer) (*Response, error) {
 	req, errReq := makeRequest(ctx, url, buf)
 	if errReq != nil {
 		return nil, errReq
@@ -19,7 +19,7 @@ func send(ctx context.Context, httpClient *http.Client, url string, buf *bytes.B
 	}
 	defer func() { _ = resp.Body.Close() }()
 
-	bulkResp := &BulkResponse{}
+	bulkResp := &Response{}
 	if err := json.NewDecoder(resp.Body).Decode(bulkResp); err != nil {
 		return nil, err
 	}

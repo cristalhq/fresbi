@@ -23,30 +23,30 @@ func (br *bulkRequest) Reset() {
 }
 
 // Index ...
-func (br *bulkRequest) Index(item *BulkItem) error {
+func (br *bulkRequest) Index(item *Item) error {
 	item.action = "index"
 	return br.addItem(item)
 }
 
 // Create ...
-func (br *bulkRequest) Create(item *BulkItem) error {
+func (br *bulkRequest) Create(item *Item) error {
 	item.action = "create"
 	return br.addItem(item)
 }
 
 // Update ...
-func (br *bulkRequest) Update(item *BulkItem) error {
+func (br *bulkRequest) Update(item *Item) error {
 	item.action = "update"
 	return br.addItem(item)
 }
 
 // Delete ...
-func (br *bulkRequest) Delete(docID string) error {
+func (br *bulkRequest) Delete(item *Item) error {
 	item.action = "delete"
 	return br.addItem(item)
 }
 
-func (br *bulkRequest) addItem(item *BulkItem) error {
+func (br *bulkRequest) addItem(item *Item) error {
 	if err := br.writeMeta(item); err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func (br *bulkRequest) addItem(item *BulkItem) error {
 	return nil
 }
 
-func (br *bulkRequest) writeMeta(item *BulkItem) error {
+func (br *bulkRequest) writeMeta(item *Item) error {
 	b, err := json.Marshal(item)
 	if err != nil {
 		return err
@@ -70,7 +70,7 @@ func (br *bulkRequest) writeMeta(item *BulkItem) error {
 	return nil
 }
 
-func (br *bulkRequest) writeBody(item *BulkItem) error {
+func (br *bulkRequest) writeBody(item *Item) error {
 	var body []byte
 
 	switch data := item.Body.(type) {

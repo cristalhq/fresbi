@@ -47,10 +47,10 @@ func NewClient(client *http.Client) *Client {
 
 // Batch ...
 type Batch interface {
-	Index(docID string, data interface{}) error
-	Create(docID string, data interface{}) error
-	Update(docID string, data interface{}) error
-	Delete(docID string) error
+	Index(item *Item) error
+	Create(item *Item) error
+	Update(item *Item) error
+	Delete(item *Item) error
 }
 
 // AsBatch ...

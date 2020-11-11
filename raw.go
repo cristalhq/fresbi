@@ -25,11 +25,6 @@ func (rc *RawClient) Reset() {
 
 // Flush ...
 func (rc *RawClient) Flush(ctx context.Context) (*Response, error) {
-	req, errReq := makeRequest(ctx, rc.url, rc.req.Buffer())
-	if errReq != nil {
-		return nil, errReq
-	}
-
 	resp, errResp := send(ctx, rc.client, rc.url, rc.req.Buffer())
 	if errResp != nil {
 		return nil, errResp
@@ -38,22 +33,21 @@ func (rc *RawClient) Flush(ctx context.Context) (*Response, error) {
 }
 
 // Index ...
-func (rc *RawClient) Index(item *IndexItem) error {
-	item.op = "index"
-	return rc.req.Index(docID, data)
+func (rc *RawClient) Index(item *Item) error {
+	return rc.req.Index(item)
 }
 
 // Create ...
-func (rc *RawClient) Create(index, docID string, data interface{}) error {
-	return rc.req.Create(docID, data)
+func (rc *RawClient) Create(item *Item) error {
+	return rc.req.Create(item)
 }
 
 // Update ...
-func (rc *RawClient) Update(index, docID string, data interface{}) error {
-	return rc.req.Update(docID, data)
+func (rc *RawClient) Update(item *Item) error {
+	return rc.req.Update(item)
 }
 
 // Delete ...
-func (rc *RawClient) Delete(index, docID string) error {
-	return rc.req.Delete(docID)
+func (rc *RawClient) Delete(item *Item) error {
+	return rc.req.Delete(item)
 }

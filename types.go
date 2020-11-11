@@ -46,3 +46,11 @@ type BulkResponseItem struct {
 	// ID            string `json:"_id,omitempty"`
 	// ForcedRefresh bool   `json:"forced_refresh,omitempty"`
 }
+
+type bulkIndexerItem struct {
+	Index      string
+	Action     string
+	DocumentID string
+	Body       interface{}
+	// RetryOnConflict *int
+}

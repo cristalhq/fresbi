@@ -30,6 +30,4 @@ func Example() {
 		panic(err)
 	}
 	_ = resp
-
-	// Output:
 }

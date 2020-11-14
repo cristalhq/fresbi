@@ -73,6 +73,9 @@ func (br *bulkRequest) writeMeta(item *Item) error {
 }
 
 func (br *bulkRequest) writeBody(item *Item) error {
+	if item.action == "delete" { // doesn't have body, only meta
+		return nil
+	}
 	var body []byte
 
 	switch data := item.Body.(type) {
@@ -93,7 +96,7 @@ func (br *bulkRequest) writeBody(item *Item) error {
 		}
 	}
 
-	// true only when item.Body is []byte or string
+	// true only when item.Body is a `[]byte` or `string`
 	if body != nil {
 		_, _ = br.buf.Write(body)
 	}

@@ -7,15 +7,16 @@ import (
 
 // RawClient ...
 type RawClient struct {
-	client *http.Client
-	url    string
-	config Config
+	client *bulkClient
 	req    *bulkRequest
 }
 
 // NewRawClient ...
-func NewRawClient(client *http.Client) *RawClient {
-	return &RawClient{}
+func NewRawClient(url string, client *http.Client, config *Config) *RawClient {
+	return &RawClient{
+		client: newBulkClient(url, client, config),
+		req:    newBulkRequest(),
+	}
 }
 
 // Reset ...
@@ -23,9 +24,9 @@ func (rc *RawClient) Reset() {
 	rc.req.Reset()
 }
 
-// Flush ...
-func (rc *RawClient) Flush(ctx context.Context) (*Response, error) {
-	resp, errResp := send(ctx, rc.client, rc.url, rc.req.Buffer())
+// Send ...
+func (rc *RawClient) Send(ctx context.Context) (*Response, error) {
+	resp, errResp := rc.client.send(ctx, rc.req.Buffer())
 	if errResp != nil {
 		return nil, errResp
 	}

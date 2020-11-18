@@ -66,9 +66,9 @@ func (br *bulkRequest) writeMeta(item *Item) error {
 
 	br.buf.WriteString(`{"`)
 	br.buf.WriteString(item.action)
-	br.buf.WriteString(`"}:`)
+	br.buf.WriteString(`":`)
 	_, _ = br.buf.Write(b)
-	br.buf.WriteString(`}\n`)
+	br.buf.WriteString("}\r\n")
 	return nil
 }
 
@@ -100,6 +100,6 @@ func (br *bulkRequest) writeBody(item *Item) error {
 	if body != nil {
 		_, _ = br.buf.Write(body)
 	}
-	br.buf.WriteByte('\n')
+	br.buf.WriteString("\r\n")
 	return nil
 }

@@ -17,12 +17,13 @@ type Item struct {
 	VersionType   string `json:"version_type,omitempty"`
 	IfSeqNo       *int64 `json:"if_seq_no,omitempty"`
 	IfPrimaryTerm *int64 `json:"if_primary_term,omitempty"`
-	Pipeline      string `json:"pipeline,omitempty"` // index only
+	Pipeline      string `json:"pipeline,omitempty"` // 'index' only
 
-	// RetryOnConflict is "_retry_on_conflict" for 6.0 and "retry_on_conflict" for 6.1+.
-	RetryOnConflict *int `json:"retry_on_conflict,omitempty"` // index and update only
+	RetryOnConflict *int `json:"retry_on_conflict,omitempty"` // 'index' and 'update' only
 
-	Body interface{}
+	AsSource bool `json:"-"` // 'update' only
+
+	Body interface{} `json:"-"`
 }
 
 // Response represents the Elasticsearch bulk response.

@@ -10,7 +10,7 @@ Fresbi (R) ElasticSearch Bulk Indexer.
 ## Rationale
 
 Two most popular Elasticsearch (ES) clients ([official](https://github.com/elastic/go-elasticsearch) and [community](https://github.com/olivere/elastic)) have API for ES Bulk indexing ([docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html)).
-Sadly it's not very friendly: asynchronous where it cannot be, too verbose for simple things and is memory greedy. This package addresses all of the problems.
+Sadly it's not very friendly: asynchronous where it should not be, too verbose for simple things and is memory greedy. This package addresses all of the problems.
 
 ## Features
 
@@ -47,7 +47,7 @@ Also see examples: [this above](https://github.com/cristalhq/fresbi/blob/master/
 
 ## Documentation
 
-See [these docs][doc-url].
+See [these docs][pkg-url].
 
 ## License
 

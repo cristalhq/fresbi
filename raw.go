@@ -25,7 +25,7 @@ func (rc *RawClient) Reset() {
 }
 
 // Send ...
-func (rc *RawClient) Send(ctx context.Context) (*Response, error) {
+func (rc *RawClient) Send(ctx context.Context) (*http.Response, error) {
 	resp, errResp := rc.client.send(ctx, rc.req.Buffer())
 	if errResp != nil {
 		return nil, errResp

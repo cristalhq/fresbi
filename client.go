@@ -3,7 +3,6 @@ package fresbi
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"net/http"
 )
 
@@ -21,7 +20,7 @@ func newBulkClient(url string, client *http.Client, config *Config) *bulkClient 
 	}
 }
 
-func (bc *bulkClient) send(ctx context.Context, buf *bytes.Buffer) (*Response, error) {
+func (bc *bulkClient) send(ctx context.Context, buf *bytes.Buffer) (*http.Response, error) {
 	req, errReq := bc.makeRequest(ctx, buf)
 	if errReq != nil {
 		return nil, errReq
@@ -31,16 +30,7 @@ func (bc *bulkClient) send(ctx context.Context, buf *bytes.Buffer) (*Response, e
 	if errResp != nil {
 		return nil, errResp
 	}
-	defer func() { _ = resp.Body.Close() }()
-
-	bulkResp := &Response{}
-	if err := json.NewDecoder(resp.Body).Decode(bulkResp); err != nil {
-		return nil, err
-	}
-
-	bulkResp.HTTPResponse = resp
-
-	return bulkResp, nil
+	return resp, nil
 }
 
 func (bc *bulkClient) makeRequest(ctx context.Context, buf *bytes.Buffer) (*http.Request, error) {

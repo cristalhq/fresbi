@@ -1,9 +1,5 @@
 package fresbi
 
-import (
-	"net/http"
-)
-
 // Item ...
 type Item struct {
 	action string
@@ -26,17 +22,14 @@ type Item struct {
 	Body interface{} `json:"-"`
 }
 
-// Response represents the Elasticsearch bulk response.
-//
+// Response for bulk request from Elasticsearch.
 type Response struct {
-	HTTPResponse *http.Response
-
 	Took      int                        `json:"took,omitempty"`
 	HasErrors bool                       `json:"errors,omitempty"`
 	Items     []map[string]*ResponseItem `json:"items,omitempty"`
 }
 
-// ResponseItem represents the Elasticsearch bulk response item.
+// ResponseItem for Response.
 //
 type ResponseItem struct {
 	Index      string `json:"_index"`

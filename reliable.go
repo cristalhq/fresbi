@@ -28,7 +28,7 @@ type Batch interface {
 }
 
 // AsBatch ...
-func (c *Client) AsBatch(ctx context.Context, fn func(Batch) error) (*Response, error) {
+func (c *Client) AsBatch(ctx context.Context, fn func(Batch) error) (*http.Response, error) {
 	req := newBulkRequest()
 
 	if err := fn(req); err != nil {

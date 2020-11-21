@@ -13,7 +13,7 @@ type Client struct {
 }
 
 // NewClient ...
-func NewClient(url string, client *http.Client, config *Config) *Client {
+func NewClient(url string, client Doer, config *Config) *Client {
 	return &Client{
 		client: newBulkClient(url, client, config),
 	}

@@ -8,11 +8,11 @@ import (
 
 type bulkClient struct {
 	url    string
-	client *http.Client
+	client Doer
 	config *Config
 }
 
-func newBulkClient(url string, client *http.Client, config *Config) *bulkClient {
+func newBulkClient(url string, client Doer, config *Config) *bulkClient {
 	return &bulkClient{
 		url:    url,
 		client: client,

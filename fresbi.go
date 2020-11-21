@@ -1,5 +1,12 @@
 package fresbi
 
+import "net/http"
+
+// Doer sends HTTP request and returns response.
+type Doer interface {
+	Do(*http.Request) (*http.Response, error)
+}
+
 // Config ...
 type Config struct {
 	URL                 string

@@ -9,7 +9,7 @@ import (
 )
 
 func Example() {
-	client := fresbi.NewClient("http://localhost:9200", http.DefaultClient, &fresbi.Config{})
+	client := fresbi.NewClient("http://localhost:9200", http.DefaultClient, fresbi.Config{})
 
 	msgs := []string{"hi", "there", "everyone"}
 

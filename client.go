@@ -9,10 +9,10 @@ import (
 type bulkClient struct {
 	url    string
 	client Doer
-	config *Config
+	config Config
 }
 
-func newBulkClient(url string, client Doer, config *Config) *bulkClient {
+func newBulkClient(url string, client Doer, config Config) *bulkClient {
 	return &bulkClient{
 		url:    url,
 		client: client,

@@ -3,13 +3,16 @@ package fresbi_test
 import (
 	"context"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/cristalhq/fresbi"
 )
 
 func Example() {
-	client := fresbi.NewClient("http://localhost:9200", http.DefaultClient, fresbi.Config{})
+	url := os.Getenv("ELASTICSEARCH_URL")
+
+	client := fresbi.NewClient(url, http.DefaultClient, fresbi.Config{})
 
 	msgs := []string{"hi", "there", "everyone"}
 

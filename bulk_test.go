@@ -28,6 +28,22 @@ func TestBulkRequest(t *testing.T) {
 		t.Error(err)
 	}
 
+	var body = struct {
+		Foo string `json:"foo"`
+		Bar int64  `json:"bar"`
+	}{
+		Foo: "test-value",
+		Bar: 42,
+	}
+	err = req.Create(&Item{
+		ID:          "create-id-with-field",
+		VersionType: "test-version",
+		Body:        body,
+	})
+	if err != nil {
+		t.Error(err)
+	}
+
 	err = req.Update(&Item{
 		ID:       "update-id",
 		Index:    "test-index",
@@ -47,16 +63,17 @@ func TestBulkRequest(t *testing.T) {
 
 	got := req.Buffer().String()
 
-	want := `{"index":{"_id":"index-id","parent":"test-parent"}}
-index-raw-string-body
-{"create":{"_id":"create-id","version_type":"test-version"}}
-create-byte-slice-body
-{"update":{"_index":"test-index","_id":"update-id","pipeline":"test-pipeline"}}
-body from io.Reader
-{"delete":{"_id":"delete-id"}}
-`
+	want := `{"index":{"_id":"index-id","parent":"test-parent"}}` + "\n" +
+		`index-raw-string-body` + "\n" +
+		`{"create":{"_id":"create-id","version_type":"test-version"}}` + "\n" +
+		`create-byte-slice-body` + "\n" +
+		`{"create":{"_id":"create-id-with-field","version_type":"test-version"}}` + "\n" +
+		`{"foo":"test-value","bar":42}` + "\n" +
+		`{"update":{"_index":"test-index","_id":"update-id","pipeline":"test-pipeline"}}` + "\n" +
+		`body from io.Reader` + "\n" +
+		`{"delete":{"_id":"delete-id"}}` + "\n"
 
 	if want != got {
-		t.Fatalf("want %q, got %q", want, got)
+		t.Errorf("want %v %q, got %v %q", len(want), want, len(got), got)
 	}
 }

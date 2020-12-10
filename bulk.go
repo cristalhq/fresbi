@@ -59,16 +59,17 @@ func (br *bulkRequest) addItem(item *Item) error {
 }
 
 func (br *bulkRequest) writeMeta(item *Item) error {
+	br.buf.WriteString(`{"`)
+	br.buf.WriteString(item.action)
+	br.buf.WriteString(`":`)
+
 	b, err := json.Marshal(item)
 	if err != nil {
 		return err
 	}
-
-	br.buf.WriteString(`{"`)
-	br.buf.WriteString(item.action)
-	br.buf.WriteString(`":`)
 	_, _ = br.buf.Write(b)
-	br.buf.WriteString("}\r\n")
+
+	br.buf.WriteString("}\n")
 	return nil
 }
 
@@ -76,30 +77,27 @@ func (br *bulkRequest) writeBody(item *Item) error {
 	if item.action == "delete" { // doesn't have body, only meta
 		return nil
 	}
-	var body []byte
 
 	switch data := item.Body.(type) {
 	case []byte:
-		body = data
+		_, _ = br.buf.Write(data)
+		br.buf.WriteByte('\n')
+		return nil
+
 	case string:
-		body = []byte(data)
+		_, _ = br.buf.WriteString(data)
+		br.buf.WriteByte('\n')
+		return nil
 
 	case io.Reader:
 		_, err := br.buf.ReadFrom(data)
 		if err != nil {
 			return err
 		}
-	default:
-		err := json.NewEncoder(br.buf).Encode(data)
-		if err != nil {
-			return err
-		}
-	}
+		br.buf.WriteByte('\n')
+		return nil
 
-	// true only when item.Body is a `[]byte` or `string`
-	if body != nil {
-		_, _ = br.buf.Write(body)
+	default:
+		return json.NewEncoder(br.buf).Encode(data)
 	}
-	br.buf.WriteString("\r\n")
-	return nil
 }

@@ -11,7 +11,7 @@ type RawClient struct {
 	req    *bulkRequest
 }
 
-// NewRawClient ...
+// NewRawClient instantiates a new RawClient.
 func NewRawClient(url string, client Doer, config Config) *RawClient {
 	return &RawClient{
 		client: newBulkClient(url, client, config),
@@ -19,12 +19,12 @@ func NewRawClient(url string, client Doer, config Config) *RawClient {
 	}
 }
 
-// Reset ...
+// Reset the current buffer.
 func (rc *RawClient) Reset() {
 	rc.req.Reset()
 }
 
-// Send ...
+// Send the given buffer as a bulk request.
 func (rc *RawClient) Send(ctx context.Context) (*http.Response, error) {
 	resp, errResp := rc.client.send(ctx, rc.req.Buffer())
 	if errResp != nil {
@@ -33,22 +33,22 @@ func (rc *RawClient) Send(ctx context.Context) (*http.Response, error) {
 	return resp, nil
 }
 
-// Index ...
+// Index a document in a bulk request.
 func (rc *RawClient) Index(item *Item) error {
 	return rc.req.Index(item)
 }
 
-// Create ...
+// Create a document in a bulk request.
 func (rc *RawClient) Create(item *Item) error {
 	return rc.req.Create(item)
 }
 
-// Update ...
+// Update a document in a bulk request.
 func (rc *RawClient) Update(item *Item) error {
 	return rc.req.Update(item)
 }
 
-// Delete ...
+// Delete a document in a bulk request.
 func (rc *RawClient) Delete(item *Item) error {
 	return rc.req.Delete(item)
 }

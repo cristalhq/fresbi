@@ -5,17 +5,17 @@ import (
 	"net/http"
 )
 
-// Client ...
+// ReliableClient ...
 // See: https://www.elastic.co/guide/en/elasticsearch/reference/master/docs-bulk.html
 //
-type Client struct {
+type ReliableClient struct {
 	client *bulkClient
 }
 
-// NewClient ...
-func NewClient(url string, client Doer, config Config) *Client {
-	return &Client{
-		client: newBulkClient(url, client, config),
+// NewReliableClient ...
+func NewReliableClient(client Doer, config Config) *ReliableClient {
+	return &ReliableClient{
+		client: newBulkClient(client, config),
 	}
 }
 
@@ -28,11 +28,11 @@ type Batch interface {
 }
 
 // AsBatch ...
-func (c *Client) AsBatch(ctx context.Context, fn func(Batch) error) (*http.Response, error) {
+func (c *ReliableClient) AsBatch(ctx context.Context, fn func(Batch) error) (*http.Response, error) {
 	req := newBulkRequest()
+	defer req.Reset()
 
 	if err := fn(req); err != nil {
-		req.Reset()
 		return nil, err
 	}
 

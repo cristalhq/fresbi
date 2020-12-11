@@ -3,6 +3,7 @@ package fresbi
 import (
 	"bytes"
 	"context"
+	"io"
 	"net/http"
 )
 
@@ -12,9 +13,8 @@ type bulkClient struct {
 	config Config
 }
 
-func newBulkClient(url string, client Doer, config Config) *bulkClient {
+func newBulkClient(client Doer, config Config) *bulkClient {
 	return &bulkClient{
-		url:    url,
 		client: client,
 		config: config,
 	}
@@ -28,13 +28,15 @@ func (bc *bulkClient) send(ctx context.Context, buf *bytes.Buffer) (*http.Respon
 
 	resp, errResp := bc.client.Do(req)
 	if errResp != nil {
-		return nil, errResp
+		if errResp != io.EOF {
+			return nil, errResp
+		}
 	}
 	return resp, nil
 }
 
 func (bc *bulkClient) makeRequest(ctx context.Context, buf *bytes.Buffer) (*http.Request, error) {
-	req, errReq := http.NewRequestWithContext(ctx, http.MethodPost, bc.url, buf)
+	req, errReq := http.NewRequestWithContext(ctx, http.MethodPost, bc.config.URL, buf)
 	if errReq != nil {
 		return nil, errReq
 	}

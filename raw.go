@@ -12,9 +12,9 @@ type RawClient struct {
 }
 
 // NewRawClient instantiates a new RawClient.
-func NewRawClient(url string, client Doer, config Config) *RawClient {
+func NewRawClient(client Doer, config Config) *RawClient {
 	return &RawClient{
-		client: newBulkClient(url, client, config),
+		client: newBulkClient(client, config),
 		req:    newBulkRequest(),
 	}
 }

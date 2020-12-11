@@ -5,11 +5,11 @@
 [![reportcard-img]][reportcard-url]
 [![coverage-img]][coverage-url]
 
-Fresbi (R) ElasticSearch Bulk Indexer.
+Fast Reliable ElasticSearch Bulk Indexer.
 
 ## Rationale
 
-Two most popular Elasticsearch (ES) clients ([official](https://github.com/elastic/go-elasticsearch) and [community](https://github.com/olivere/elastic)) have API for ES Bulk indexing ([docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html)).
+Two most popular Elasticsearch (ES) clients ([official](https://github.com/elastic/go-elasticsearch) and [community](https://github.com/olivere/elastic)) have an API for ES Bulk indexing ([docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html)).
 Sadly it's not very friendly: asynchronous where it should not be, too verbose for simple things and is memory greedy. This package addresses all of the problems.
 
 ## Features
@@ -19,15 +19,7 @@ Sadly it's not very friendly: asynchronous where it should not be, too verbose f
 * Optimized for speed.
 * Dependency-free.
 
-Also R in `fresbi` can be:
-
-- `ReliableClient` 
-- `RawClient`
-
-or as a feature:
-
-- `Retryable`
-- `Reliable`
+Also R in `fresbi` can mean `Raw` (`RawClient`).
 
 ## Install
 

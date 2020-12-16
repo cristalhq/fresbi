@@ -9,10 +9,10 @@ import (
 	"github.com/cristalhq/fresbi"
 )
 
-func Example() {
-	url := os.Getenv("ELASTICSEARCH_URL")
+func ExampleReliableClient() {
+	url := os.Getenv("ELASTICSEARCH_URL") // by example "http://localhost:9200/_bulk"
 
-	client := fresbi.NewClient(url, http.DefaultClient, fresbi.Config{})
+	client := fresbi.NewReliableClient(http.DefaultClient, fresbi.Config{URL: url})
 
 	msgs := []string{"hi", "there", "everyone"}
 
@@ -27,6 +27,30 @@ func Example() {
 		}
 		return nil
 	})
+	if err != nil {
+		panic(err)
+	}
+	_ = resp
+
+	// Output:
+	//
+}
+
+func ExampleRawClient() {
+	url := os.Getenv("ELASTICSEARCH_URL") // by example "http://localhost:9200/_bulk"
+
+	client := fresbi.NewRawClient(http.DefaultClient, fresbi.Config{URL: url})
+
+	err := client.Create(&fresbi.Item{
+		Index: "best_index_ever",
+		ID:    strconv.Itoa(1),
+		Body:  `can be almost anything `,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	resp, err := client.Send(context.Background())
 	if err != nil {
 		panic(err)
 	}

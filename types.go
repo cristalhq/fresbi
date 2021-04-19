@@ -1,28 +1,29 @@
 package fresbi
 
-// Item ...
+// Item of a bulk request.
+// See fields doc-comments for more.
 type Item struct {
 	action string
 
-	Index         string `json:"_index,omitempty"`
-	ID            string `json:"_id,omitempty"`
-	Type          string `json:"_type,omitempty"`
-	Parent        string `json:"parent,omitempty"`
-	Routing       string `json:"routing,omitempty"`
-	Version       *int64 `json:"version,omitempty"`
-	VersionType   string `json:"version_type,omitempty"`
-	IfSeqNo       *int64 `json:"if_seq_no,omitempty"`
-	IfPrimaryTerm *int64 `json:"if_primary_term,omitempty"`
-	Pipeline      string `json:"pipeline,omitempty"` // 'index' only
+	Index           string `json:"_index,omitempty"`
+	ID              string `json:"_id,omitempty"`
+	Type            string `json:"_type,omitempty"`
+	Parent          string `json:"parent,omitempty"`
+	Routing         string `json:"routing,omitempty"`
+	Version         *int64 `json:"version,omitempty"`
+	VersionType     string `json:"version_type,omitempty"`
+	IfSeqNo         *int64 `json:"if_seq_no,omitempty"`
+	IfPrimaryTerm   *int64 `json:"if_primary_term,omitempty"`
+	Pipeline        string `json:"pipeline,omitempty"`          // 'index' only
+	RetryOnConflict *int   `json:"retry_on_conflict,omitempty"` // 'index' and 'update' only
 
-	RetryOnConflict *int `json:"retry_on_conflict,omitempty"` // 'index' and 'update' only
-
-	AsSource bool `json:"-"` // 'update' only
+	DocAsSource bool `json:"-"` // 'update' only (not Elasticsearch API)
 
 	Body interface{} `json:"-"`
 }
 
 // Response for bulk request from Elasticsearch.
+//
 type Response struct {
 	Took      int                        `json:"took,omitempty"`
 	HasErrors bool                       `json:"errors,omitempty"`
@@ -63,11 +64,3 @@ type ResponseItem struct {
 	// ID            string `json:"_id,omitempty"`
 	// ForcedRefresh bool   `json:"forced_refresh,omitempty"`
 }
-
-// type bulkIndexerItem struct {
-// 	Index      string
-// 	Action     string
-// 	DocumentID string
-// 	Body       interface{}
-// 	// RetryOnConflict *int
-// }

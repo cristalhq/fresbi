@@ -3,12 +3,14 @@ package fresbi
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 type bulkClient struct {
-	url    string
 	client Doer
 	config Config
 }
@@ -42,34 +44,33 @@ func (bc *bulkClient) makeRequest(ctx context.Context, buf *bytes.Buffer) (*http
 	}
 	req.Header.Add("Content-Type", "application/x-ndjson")
 
-	// params := url.Values{}
-	// if c.config.pipeline != "" {
-	// 	params.Set("pipeline", c.config.pipeline)
-	// }
-	// if c.config.refresh != "" {
-	// 	params.Set("refresh", c.config.refresh)
-	// }
-	// if c.config.routing != "" {
-	// 	params.Set("routing", c.config.routing)
-	// }
-	// if v := s.pretty; v != nil {
+	params := url.Values{}
+	if bc.config.Pipeline != "" {
+		params.Set("pipeline", bc.config.Pipeline)
+	}
+	if bc.config.Refresh != "" {
+		params.Set("refresh", bc.config.Refresh)
+	}
+	if bc.config.Routing != "" {
+		params.Set("routing", bc.config.Routing)
+	}
+	// if v := bc.config.Pretty; v != nil {
 	// 	params.Set("pretty", fmt.Sprint(*v))
 	// }
-	// if v := s.human; v != nil {
+	// if v := bc.config.Human; v != nil {
 	// 	params.Set("human", fmt.Sprint(*v))
 	// }
-	// if v := c.config.errorTrace; v != nil {
-	// 	params.Set("error_trace", fmt.Sprint(*v))
-	// }
-	// if len(c.config.filterPath) > 0 {
-	// 	params.Set("filter_path", strings.Join(c.config.filterPath, ","))
-	// }
-	// if c.config.timeout != "" {
-	// 	params.Set("timeout", c.config.timeout)
-	// }
-	// if c.config.waitForActiveShards != "" {
-	// 	params.Set("wait_for_active_shards", c.config.waitForActiveShards)
-	// }
-
+	if v := bc.config.ErrorTrace; v != nil {
+		params.Set("error_trace", fmt.Sprint(*v))
+	}
+	if len(bc.config.FilterPath) > 0 {
+		params.Set("filter_path", strings.Join(bc.config.FilterPath, ","))
+	}
+	if bc.config.Timeout != "" {
+		params.Set("timeout", bc.config.Timeout)
+	}
+	if bc.config.WaitForActiveShards != "" {
+		params.Set("wait_for_active_shards", bc.config.WaitForActiveShards)
+	}
 	return req, nil
 }
